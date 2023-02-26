@@ -1,70 +1,96 @@
 class Character:
     """
-    Represents a character in the game.
+    This class represents a character in the game.
 
     Attributes:
-    - name: The name of the character.
-    - strength: The character's strength attribute.
-    - dexterity: The character's dexterity attribute.
-    - intelligence: The character's intelligence attribute.
+        name (str): The name of the character.
+        strength (int): The strength attribute of the character.
+        defense (int): The defense attribute of the character.
+        health (int): The health attribute of the character.
+        inventory (list): A list of the items currently held by the character.
+        effects (dict): A dictionary of the effects currently applied to the character.
     """
 
-    def __init__(self, name, strength, dexterity, intelligence):
+    def __init__(self, name, strength, defense, health):
         """
-        Initializes a new character object with the given attributes.
+        Initializes a new Character object with the specified name, strength,
+        defense, and health attributes.
 
-        Arguments:
-        - name: The name of the character.
-        - strength: The character's strength attribute.
-        - dexterity: The character's dexterity attribute.
-        - intelligence: The character's intelligence attribute.
+        Args:
+            name (str): The name of the character.
+            strength (int): The strength attribute of the character.
+            defense (int): The defense attribute of the character.
+            health (int): The health attribute of the character.
         """
         self.name = name
         self.strength = strength
-        self.dexterity = dexterity
-        self.intelligence = intelligence
+        self.defense = defense
+        self.health = health
+        self.inventory = []
+        self.effects = {}
 
-    def attack(self):
+    def take_damage(self, damage):
         """
-        Calculates the character's attack power based on their strength attribute.
+        Causes the character to take the specified amount of damage.
+
+        Args:
+            damage (int): The amount of damage to inflict on the character.
+        """
+        self.health -= damage
+
+    def is_alive(self):
+        """
+        Determines whether the character is alive or dead.
 
         Returns:
-        The character's attack power.
+            bool: True if the character is alive, False otherwise.
         """
-        return self.strength
+        return self.health > 0
 
-    def defend(self):
+    def add_item(self, item):
         """
-        Calculates the character's defense power based on their dexterity attribute.
+        Adds the specified item to the character's inventory.
 
-        Returns:
-        The character's defense power.
+        Args:
+            item (Item): The item to add to the character's inventory.
         """
-        return self.dexterity
+        self.inventory.append(item)
 
-    def use_item(self, item):
+    def remove_item(self, item):
         """
-        Applies the effect of the given item to the character.
+        Removes the specified item from the character's inventory.
 
-        Arguments:
-        - item: The item to use.
-
-        Returns:
-        None.
+        Args:
+            item (Item): The item to remove from the character's inventory.
         """
-        try:
-            effect = item["effect"]
-            amount = item["amount"]
-        except KeyError:
-            print("Error: Item is missing a required attribute.")
-            return
+        self.inventory.remove(item)
 
-        if effect == "strength":
-            self.strength += amount
-        elif effect == "dexterity":
-            self.dexterity += amount
-        elif effect == "intelligence":
-            self.intelligence += amount
-        else:
-            print(f"Error: Invalid effect attribute {effect}.")
+    def add_effect(self, effect):
+        """
+        Adds the specified effect to the character.
 
+        Args:
+            effect (Effect): The effect to add to the character.
+        """
+        self.effects[effect.name] = effect
+
+    def remove_effect(self, effect):
+        """
+        Removes the specified effect from the character.
+
+        Args:
+            effect (Effect): The effect to remove from the character.
+        """
+        del self.effects[effect.name]
+
+    def attack_enemy(self, enemy):
+        """
+        Causes the character to attack the specified enemy.
+
+        Args:
+            enemy (Enemy): The enemy to attack.
+        """
+        damage = self.strength - enemy.defense
+        if damage > 0:
+            enemy.take_damage(damage)
+        return damage
