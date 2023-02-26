@@ -1,56 +1,26 @@
-class Enemy:
-    """
-    This class represents an enemy in the game.
+from character import Character
 
-    Attributes:
-        name (str): The name of the enemy.
-        strength (int): The strength attribute of the enemy.
-        defense (int): The defense attribute of the enemy.
-        health (int): The health attribute of the enemy.
+
+class Enemy(Character):
+    """
+    Represents an enemy character in the game.
     """
 
-    def __init__(self, name, strength, defense, health):
+    def __init__(self, name, attributes=None, health=100):
         """
-        Initializes a new Enemy object with the specified name, strength,
-        defense, and health attributes.
+        Initializes a new enemy character with the specified name, attributes, and health.
 
-        Args:
-            name (str): The name of the enemy.
-            strength (int): The strength attribute of the enemy.
-            defense (int): The defense attribute of the enemy.
-            health (int): The health attribute of the enemy.
+        :param name: The name of the enemy character.
+        :param attributes: A dictionary of attributes that the enemy character has.
+        :param health: The starting health of the enemy character.
         """
-        self.name = name
-        self.strength = strength
-        self.defense = defense
-        self.health = health
+        super().__init__(name, attributes=attributes, health=health)
 
-    def take_damage(self, damage):
+    def attack(self, character):
         """
-        Causes the enemy to take the specified amount of damage.
+        Attacks the specified character.
 
-        Args:
-            damage (int): The amount of damage to inflict on the enemy.
+        :param character: The character to attack.
         """
-        self.health -= damage
-
-    def is_alive(self):
-        """
-        Determines whether the enemy is alive or dead.
-
-        Returns:
-            bool: True if the enemy is alive, False otherwise.
-        """
-        return self.health > 0
-
-    def attack_character(self, character):
-        """
-        Causes the enemy to attack the specified character.
-
-        Args:
-            character (Character): The character to attack.
-        """
-        damage = self.strength - character.defense
-        if damage > 0:
-            character.take_damage(damage)
-        return damage
+        damage = self.attributes["strength"] - character.attributes["defense"]
+        character.health -= damage

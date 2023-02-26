@@ -11,7 +11,7 @@ class Character:
         effects (dict): A dictionary of the effects currently applied to the character.
     """
 
-    def __init__(self, name, strength, defense, health):
+    def __init__(self, name, strength, defense, health=100):
         """
         Initializes a new Character object with the specified name, strength,
         defense, and health attributes.
@@ -28,6 +28,17 @@ class Character:
         self.health = health
         self.inventory = []
         self.effects = {}
+
+    def allocate_attributes(self, health_points, strength_points, defense_points):
+        total_points = health_points + strength_points + defense_points
+        if total_points > 10:
+            raise ValueError("Total attribute points cannot exceed 10")
+        # self.max_health += health_points
+        # self.max_strength += strength_points
+        # self.max_defense += defense_points
+        self.health = health_points
+        self.strength = strength_points
+        self.defense = defense_points
 
     def take_damage(self, damage):
         """
